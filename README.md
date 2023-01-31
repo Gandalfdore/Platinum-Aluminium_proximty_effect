@@ -3,12 +3,16 @@ However, nothing conclusive can be seen from the data.
 
 The values given in the 1st table are:
 
+-index of measurment
+
 -Current
 
 -Voltage
 
 
 And in the 2nd table:
+
+-index of measurment 
 
 -Temperature
 
