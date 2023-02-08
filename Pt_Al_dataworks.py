@@ -98,7 +98,7 @@ std_dev = df["Resistance"].std()
 std_dev_percent = 100*df["Resistance"].std()/df["Resistance"].median()
 std_dev_measur = 1 - df['regression score'].mean()
 
-print("---------------------------------------------------------------------")
+print("\n---------------------------------------------------------------------")
 print("-----------------------Statistical parameters------------------------")
 print("---------------------------------------------------------------------")
 print("Median of the resistance:", median)
@@ -106,7 +106,7 @@ print("Mode of the resistance:", mode)
 print("Deviation of the resistance:", std_dev)
 print("Relative deviation of the resistance:", std_dev_percent, "%")
 print("Relative deviation of the measurment:", std_dev_measur, "%")
-print("---------------------------------------------------------------------")
+print("---------------------------------------------------------------------\n")
 
 ##########################  Chi sqare  test #############
 
@@ -150,3 +150,72 @@ ax2.set_ylabel('$Resistance$ $[Ohm]$', fontsize=12)
 # fig1.savefig('Junction resistance 8,9,10.jpg')
 plt.legend()
 plt.show()
+
+
+################# Contingency table ########
+
+### H0 hyphotesis - there is no relation between the data points with temperature smaller or bigger then 0.37K and deviation from the median value
+
+threshold = 0.33
+
+df_00 = df[(df['Temperature'] <= threshold) & (df['Resistance'] > median)]
+df_01 = df[(df['Temperature'] > threshold) & (df['Resistance'] > median)]
+df_10 = df[(df['Temperature'] <= threshold) & (df['Resistance'] <= median)]
+df_11 = df[(df['Temperature'] > threshold) & (df['Resistance'] <= median)]
+
+contingency_table = [[len(df_00),len(df_01)],[len(df_10),len(df_11)]]
+stat, p, dof, expected = ss.chi2_contingency(contingency_table)
+
+
+print("\n---------------------------------------------------------------------")
+print("----------------------- Pearson's Chi^2 test------------------------")
+print("---------------------------------------------------------------------")
+
+alpha = 0.05
+print("contingency_table value is " + str(contingency_table))
+print("expected value is " + str(expected))
+print("dof value is " + str(dof))
+
+print("\nstat value is " + str(stat))
+print("p value is " + str(p))
+
+if p <= alpha:
+    print('Dependent (reject H0)')
+else:
+    print('Independent (H0 holds true)')
+    
+print("---------------------------------------------------------------------")
+
+############Chi2 sweep #######################
+
+# def chisquare_for_TvsR (df, threshold = float):
+#     """This func computes the chi^2 pearson test to see if thre is is no relation between the data points with temperature smaller or bigger then 0.37K and deviation from the median value
+#     INPUTS: The aformentioned df, a treshold for the test 
+#     OUTPUTS: The chi^2 parameters """
+    
+    
+#     df_00 = df[(df['Temperature'] <= threshold) & (df['Resistance'] > median)]
+#     df_01 = df[(df['Temperature'] > threshold) & (df['Resistance'] > median)]
+#     df_10 = df[(df['Temperature'] <= threshold) & (df['Resistance'] <= median)]
+#     df_11 = df[(df['Temperature'] > threshold) & (df['Resistance'] <= median)]
+    
+#     contingency_table = [[len(df_00),len(df_01)],[len(df_10),len(df_11)]]
+    
+#     stat, p, dof, expected = ss.chi2_contingency(contingency_table)
+    
+#     return stat, p, dof, expected
+
+# thresholds = np.linspace (0.1,1.2,20)
+# p_values = np.zeros(20)
+# for i in range(0,len(thresholds)):
+#     p_values[i] = chisquare_for_TvsR (df, thresholds[i])[1]
+    
+    
+
+# fig2, (ax1) = plt.subplots(1, 1, figsize = (5, 3.5), dpi = 300)
+# ax1.plot(thresholds, p_values,'-', color='#d63c49',linewidth=1.5)
+
+# ax1.set_xlabel('$Temperature$ $threshold$ $[K]$', fontsize=12)
+# ax1.set_ylabel('$p$', fontsize=12)
+
+############Chi2 sweep #######################
